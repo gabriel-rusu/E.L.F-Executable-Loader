@@ -1,0 +1,9 @@
+/bss
+/check_exec
+/check_perm
+/data_bss
+/hello
+/inv_perm
+/no_perm
+/qsort
+/sum

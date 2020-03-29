@@ -1,0 +1,16 @@
+all: build-pre build-post run
+
+build-pre:
+
+build-post:
+	cd _test && nmake /nologo all && cd ..
+
+run:
+	@bash ./run_all.sh
+
+pack:
+	zip -r run_test_win.zip _test/ NMakefile.checker \
+		GNUmakefile run_all.sh README
+
+clean:
+	-cd _test && nmake clean && cd ..

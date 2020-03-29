@@ -1,0 +1,2 @@
+move:
+	cd ./src; make
