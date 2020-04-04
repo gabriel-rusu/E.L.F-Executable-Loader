@@ -1,0 +1,19 @@
+.PHONY: all clean run pack build-pre build-post
+
+all: build-pre build-post run
+
+build-pre:
+
+build-post:
+	@make --no-print-directory -C _test
+
+run:
+	@./run_all.sh
+
+pack:
+	zip -r run_test_lin.zip _test/ Makefile.checker \
+		run_all.sh README
+
+clean:
+	@make --no-print-directory -C _test clean
+	-rm -f *~

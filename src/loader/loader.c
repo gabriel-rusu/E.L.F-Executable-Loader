@@ -7,14 +7,25 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <signal.h>
 #include "exec_parser.h"
 
 static so_exec_t *exec;
 
+void signal_handler(int signum)
+{
+	
+}
+
 int so_init_loader(void)
 {
 	/* TODO: initialize on-demand loader */
+	struct sigaction sig;
+ 
+    memset(&sig, 0, sizeof(sig));
+	sig.sa_handler = signal_handler
+	sigaction(SIGSEGV,&sig,NULL)
+
 	return -1;
 }
 
