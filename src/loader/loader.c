@@ -40,7 +40,6 @@ int so_init_loader(void)
 {
 	/* TODO: initialize on-demand loader */
 	struct sigaction sig;
-	initialize(&mapped_pages);
 
 	memset(&sig, 0, sizeof(sig));
 	sig.sa_flags = SA_SIGINFO;
