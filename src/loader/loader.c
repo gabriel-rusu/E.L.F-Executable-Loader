@@ -17,7 +17,7 @@ typedef struct mapped_pages{
 	int no_pages;
 }loader;
 
-initialize(loader **mapped_pages){
+void initialize(loader **mapped_pages){
 	*mapped_pages = malloc(sizeof(loader));
 	(*mapped_pages)->pages = NULL;
 	(*mapped_pages)->no_pages = 0;
