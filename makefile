@@ -1,6 +1,9 @@
-test:
+build:
 	cd ./src;\
 	make
+run: build
+	cd ./src;\
+	make -f Makefile.example
 save: clean
 	git add -A	&&\
 	echo Enter commit message: &&\
