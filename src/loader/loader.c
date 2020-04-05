@@ -10,16 +10,18 @@
 #include <signal.h>
 #include "exec_parser.h"
 
+
 static so_exec_t *exec;
 
 void signal_handler(int signum)
 {
-	
+	printf("Am ajuns in %s",__FUNCTION__);
 }
 
 int so_init_loader(void)
 {
 	/* TODO: initialize on-demand loader */
+	
 	struct sigaction sig;
  
     memset(&sig, 0, sizeof(sig));
