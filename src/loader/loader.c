@@ -48,9 +48,7 @@ void copy_into(so_seg_t *segment, int offset)
 		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
-	perror("Am ajuns aici fara eroare!");
 	memcpy(segment->data, buffer, getpagesize());
-	
 }
 
 so_seg_t *find_segment_of(void *addr)
