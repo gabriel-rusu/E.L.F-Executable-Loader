@@ -12,13 +12,22 @@
 
 
 static so_exec_t *exec;
-// typedef struct loader_internal{
-// 	void **pages
-// }loader_info;
+typedef struct mapped_pages{
+	void **pages;
+	int no_pages;
+}loader;
 
-void signal_handler(int signum)
+initialize(loader **mapped_pages){
+	*mapped_pages = malloc(sizeof(loader));
+	(*mapped_pages)->pages = NULL;
+	(*mapped_pages)->no_pages = 0;
+}
+
+static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
 	printf("Am ajuns in %s\n",__FUNCTION__);
+	printf("Got SIGSEGV at address: 0x%lx\n",(long) si->si_addr);
+
 	printf("Base addres for executable: %p\n",exec->base_addr);
 	printf("Adresele parsate sunt:\n");
 	for(int i =0;i <exec->segments_no;i++)
@@ -28,8 +37,9 @@ void signal_handler(int signum)
 int so_init_loader(void)
 {
 	/* TODO: initialize on-demand loader */
-	
 	struct sigaction sig;
+	loader *mapped_pages = NULL;
+	initialize(&mapped_pages);
  
     memset(&sig, 0, sizeof(sig));
 	sig.sa_handler = signal_handler;
