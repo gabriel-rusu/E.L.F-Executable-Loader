@@ -8,44 +8,45 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/mman.h>
 #include "exec_parser.h"
 
-
 static so_exec_t *exec;
-typedef struct mapped_pages{
-	void **pages;
-	int no_pages;
-}loader;
 
-void initialize(loader **mapped_pages){
-	*mapped_pages = malloc(sizeof(loader));
-	(*mapped_pages)->pages = NULL;
-	(*mapped_pages)->no_pages = 0;
+so_seg_t* find_segment_of(void *addr)
+{
+	for (int i = 0; i < exec->segments_no; i++)
+		if ((char *)addr - (char *)exec->segments[i].vaddr < exec->segments[i].mem_size)
+			return &(exec->segments[i]);
+	return NULL;
 }
 
 static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
-	printf("Am ajuns in %s\n",__FUNCTION__);
-	printf("Got SIGSEGV at address: %p\n",(void*) si->si_addr);
-
-	printf("Base addres for executable: %p\n",(void*)exec->base_addr);
-	printf("Adresele parsate sunt:\n");
-	for(int i =0;i <exec->segments_no;i++)
-		printf("-> %p\n",(void*)exec->segments[i].vaddr);
+	so_seg_t *segment_addr = find_segment_of(si->si_addr);
+	if (segment_addr !=NULL)
+	{
+		if(segment_addr->data!=NULL)
+			exit(EXIT_FAILURE);	// fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
+		else{
+			printf("Asta e cazul aici!");
+		}
+	}
+	else
+		exit(EXIT_FAILURE);
 }
 
 int so_init_loader(void)
 {
 	/* TODO: initialize on-demand loader */
 	struct sigaction sig;
-	loader *mapped_pages = NULL;
 	initialize(&mapped_pages);
- 
-    memset(&sig, 0, sizeof(sig));
+
+	memset(&sig, 0, sizeof(sig));
 	sig.sa_flags = SA_SIGINFO;
-    sigemptyset(&sig.sa_mask);
+	sigemptyset(&sig.sa_mask);
 	sig.sa_sigaction = signal_handler;
-	sigaction(SIGSEGV,&sig,NULL);
+	sigaction(SIGSEGV, &sig, NULL);
 
 	return -1;
 }
@@ -53,9 +54,6 @@ int so_init_loader(void)
 int so_execute(char *path, char *argv[])
 {
 	exec = so_parse_exec(path);
-	printf("Adresele parsate sunt: ");
-	for(int i =0;i <exec->segments_no;i++)
-		printf("%p\n",(void*)exec->segments->vaddr);
 	if (!exec)
 		return -1;
 
