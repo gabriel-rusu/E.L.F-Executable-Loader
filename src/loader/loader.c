@@ -21,7 +21,7 @@ void signal_handler(int signum)
 	printf("Am ajuns in %s",__FUNCTION__);
 	printf("Adresele parsate sunt: ");
 	for(int i =0;i <exec->segments_no;i++)
-		printf("%p\n",(void*)exec->segments->vaddr);
+		printf("%p\n",(void*)exec->segments[i].vaddr);
 }
 
 int so_init_loader(void)
