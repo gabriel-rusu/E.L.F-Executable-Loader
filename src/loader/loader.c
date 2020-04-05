@@ -43,13 +43,14 @@ ssize_t xread(int fd, void *buf, size_t count)
 
 void copy_into(so_seg_t *segment, int offset)
 {
-	char *buffer = calloc((segment->mem_size - offset), sizeof(char));
+	char *buffer = calloc(getpagesize(), sizeof(char));
 	if(buffer==NULL)
 		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset, SEEK_SET);
-	xread(exec_decriptor, buffer, segment->file_size - offset);
-	memcpy(segment->data, buffer, (segment->mem_size - offset));
+	xread(exec_decriptor, buffer, getpagesize());
 	perror("Am ajuns aici fara eroare!");
+	memcpy(segment->data, buffer, getpagesize());
+	
 }
 
 so_seg_t *find_segment_of(void *addr)
@@ -70,9 +71,9 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 			exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
 		else
 		{
-			segment->data = mmap(si->si_addr, segment->mem_size - length, PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			segment->data = mmap(si->si_addr, getpagesize(), PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 			copy_into(segment, length);
-			mprotect(segment->data, segment->mem_size - length, segment->perm);
+			mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
 	else
