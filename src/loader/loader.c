@@ -26,9 +26,9 @@ void initialize(loader **mapped_pages){
 static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
 	printf("Am ajuns in %s\n",__FUNCTION__);
-	printf("Got SIGSEGV at address: 0x%lx\n",(long) si->si_addr);
+	printf("Got SIGSEGV at address: %p\n",(void*) si->si_addr);
 
-	printf("Base addres for executable: %p\n",exec->base_addr);
+	printf("Base addres for executable: %p\n",(void*)exec->base_addr);
 	printf("Adresele parsate sunt:\n");
 	for(int i =0;i <exec->segments_no;i++)
 		printf("-> %p\n",(void*)exec->segments[i].vaddr);
@@ -42,7 +42,9 @@ int so_init_loader(void)
 	initialize(&mapped_pages);
  
     memset(&sig, 0, sizeof(sig));
-	sig.sa_handler = signal_handler;
+	sig.sa_flags = SA_SIGINFO;
+    sigemptyset(&sig.sa_mask);
+	sig.sa_sigaction = signal_handler;
 	sigaction(SIGSEGV,&sig,NULL);
 
 	return -1;
