@@ -3,7 +3,8 @@ build:
 	make
 run: build
 	cd ./src;\
-	make -f Makefile.example > ../result.out
+	make -f Makefile.example;\
+	LD_LIBRARY_PATH=. ./so_exec so_test_prog > ../result.out
 save: clean
 	git add -A	&&\
 	echo Enter commit message: &&\
@@ -12,4 +13,4 @@ save: clean
 	git push
 clean:
 	cd ./src;\
-	rm -f *.o
+	rm -f *.o so_exec so_test_prog libso_loader.so

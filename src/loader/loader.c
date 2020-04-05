@@ -12,10 +12,12 @@
 
 
 static so_exec_t *exec;
+struct maped
 
 void signal_handler(int signum)
 {
 	printf("Am ajuns in %s",__FUNCTION__);
+
 }
 
 int so_init_loader(void)
