@@ -67,7 +67,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 			exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
 		else
 		{
-			printf("Asta e cazul aici!");
+			perror("Asta e cazul aici!");
 			segment->data = mmap(si->si_addr, segment->mem_size - length, PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 			copy_into(segment, length);
 			mprotect(segment->data, segment->mem_size - length, segment->perm);
