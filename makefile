@@ -13,4 +13,4 @@ save: clean
 	git push
 clean:
 	cd ./src;\
-	rm -f *.o so_exec so_test_prog libso_loader.so
+	rm -f *.o so_exec so_test_prog libso_loader.so ../result.out
