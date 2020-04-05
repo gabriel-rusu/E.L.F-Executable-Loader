@@ -18,10 +18,11 @@ static so_exec_t *exec;
 
 void signal_handler(int signum)
 {
-	printf("Am ajuns in %s",__FUNCTION__);
-	printf("Adresele parsate sunt: ");
+	printf("Am ajuns in %s\n",__FUNCTION__);
+	printf("Base addres for executable: %p\n",exec->base_addr);
+	printf("Adresele parsate sunt:\n");
 	for(int i =0;i <exec->segments_no;i++)
-		printf("%p\n",(void*)exec->segments[i].vaddr);
+		printf("-> %p\n",(void*)exec->segments[i].vaddr);
 }
 
 int so_init_loader(void)
