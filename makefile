@@ -11,4 +11,5 @@ save: clean
 	git commit -m "$$line" &&\
 	git push
 clean:
+	cd ./src;\
 	rm -f *.o
