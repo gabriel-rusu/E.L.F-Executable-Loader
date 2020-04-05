@@ -23,8 +23,8 @@ int so_init_loader(void)
 	struct sigaction sig;
  
     memset(&sig, 0, sizeof(sig));
-	sig.sa_handler = signal_handler
-	sigaction(SIGSEGV,&sig,NULL)
+	sig.sa_handler = signal_handler;
+	sigaction(SIGSEGV,&sig,NULL);
 
 	return -1;
 }
@@ -32,6 +32,9 @@ int so_init_loader(void)
 int so_execute(char *path, char *argv[])
 {
 	exec = so_parse_exec(path);
+	printf("Adresele parsate sunt: ");
+	for(int i =0;i <exec->segments_no;i++)
+		printf("%p\n",(void*)exec->segments->vaddr);
 	if (!exec)
 		return -1;
 
