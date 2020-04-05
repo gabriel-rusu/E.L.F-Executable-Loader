@@ -44,6 +44,8 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment, int offset)
 {
 	char *buffer = calloc((segment->mem_size - offset), sizeof(char));
+	if(buffer==NULL)
+		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset, SEEK_SET);
 	xread(exec_decriptor, buffer, segment->file_size - offset);
 	memcpy(segment->data, buffer, (segment->mem_size - offset));
