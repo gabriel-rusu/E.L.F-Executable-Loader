@@ -1,7 +1,7 @@
 build:
 	cd ./src;\
 	make
-run: build
+run_test: build
 	cd ./src;\
 	make -f Makefile.example;\
 	LD_LIBRARY_PATH=. ./so_exec so_test_prog > ../result.out
