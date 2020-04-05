@@ -12,12 +12,16 @@
 
 
 static so_exec_t *exec;
-struct maped
+// typedef struct loader_internal{
+// 	void **pages
+// }loader_info;
 
 void signal_handler(int signum)
 {
 	printf("Am ajuns in %s",__FUNCTION__);
-
+	printf("Adresele parsate sunt: ");
+	for(int i =0;i <exec->segments_no;i++)
+		printf("%p\n",(void*)exec->segments->vaddr);
 }
 
 int so_init_loader(void)
