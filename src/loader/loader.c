@@ -65,6 +65,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
 	so_seg_t *segment = find_segment_of(si->si_addr);
 	size_t length = (char *)si->si_addr - (char *)segment->vaddr;
+	printf("length between the addresses is: %d\n",length);
 	if (segment != NULL)
 	{
 		if (segment->data != NULL)
