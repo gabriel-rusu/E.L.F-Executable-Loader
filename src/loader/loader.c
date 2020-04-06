@@ -52,10 +52,12 @@ void copy_into(so_seg_t *segment, int offset)
 }
 
 so_seg_t *find_segment_of(void *addr)
-{
-	for (int i = 0; i < exec->segments_no; i++)
-		if ((char *)addr - (char *)exec->segments[i].vaddr < exec->segments[i].mem_size)
+{	int diff;
+	for (int i = 0; i < exec->segments_no; i++){
+		diff = (char *)addr - (char *)exec->segments[i].vaddr;
+		if (diff < exec->segments[i].mem_size && diff >= 0)
 			return &(exec->segments[i]);
+	}
 	return NULL;
 }
 
@@ -69,7 +71,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 			exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
 		else
 		{
-			segment->data = mmap(si->si_addr, getpagesize(), PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			segment->data = mmap((void *)segment->vaddr, getpagesize(), PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_SHARED, exec_decriptor, segment->offset+length);
 			copy_into(segment, length);
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
