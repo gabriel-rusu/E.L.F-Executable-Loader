@@ -71,9 +71,9 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 			exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
 		else
 		{
-			segment->data = mmap((void *)segment->vaddr, getpagesize(), PROT_WRITE, MAP_FIXED | MAP_PRIVATE | MAP_SHARED, exec_decriptor, segment->offset+length);
-			copy_into(segment, length);
-			mprotect(segment->data, getpagesize(), segment->perm);
+			segment->data = mmap((void *)segment->vaddr, getpagesize(),segment->perm, MAP_FIXED | MAP_SHARED, exec_decriptor, segment->offset+length);
+			// copy_into(segment, length);
+			// mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
 	else

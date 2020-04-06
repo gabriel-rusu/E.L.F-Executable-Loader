@@ -19,6 +19,7 @@ clean: clean_src clean_test
 
 clean_test:
 	cd ./test;\
+	rm -f libso_loader.so;\
 	make -f Makefile.checker clean
 
 clean_src:
