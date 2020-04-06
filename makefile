@@ -8,7 +8,7 @@ run_test: build
 	LD_LIBRARY_PATH=. ./so_exec so_test_prog > ../result.out
 run: build
 	cd ./test &&\
-	make -f Makefile.checker > ../results.out 2 >../results.out
+	make -f Makefile.checker > ../results.out
 save: clean
 	git add -A	&&\
 	echo Enter commit message: &&\
