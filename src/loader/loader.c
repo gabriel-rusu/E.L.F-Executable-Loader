@@ -43,12 +43,12 @@ ssize_t xread(int fd, void *buf, size_t count)
 
 void copy_into(so_seg_t *segment, int offset)
 {
-	char *buffer = calloc(segment->mem_size, sizeof(char));
+	char *buffer = calloc(getpagesize(), sizeof(char));
 	if(buffer==NULL)
 		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset, SEEK_SET);
-	xread(exec_decriptor, buffer, segment->mem_size);
-	memcpy(segment->data, buffer, segment->mem_size);
+	xread(exec_decriptor, buffer, getpagesize());
+	memcpy(segment->data, buffer, getpagesize());
 }
 
 so_seg_t *find_segment_of(void *addr)
@@ -68,12 +68,12 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	printf("length between the addresses is: %d\n",length);
 	if (segment != NULL)
 	{
-		if (segment->data != NULL)
-			exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
-		else
+		// if (segment->data != NULL)
+		// 	exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
+		// else
 		{
 			//copiaza din fisier exact bucata de cod aferenta segmentului 
-			segment->data = mmap((void *)si->si_addr, segment->mem_size,PERM_R|PERM_W, MAP_FIXED | MAP_PRIVATE |MAP_ANONYMOUS, -1, 0);
+			segment->data = mmap((void *)si->si_addr, getpagesize(),PERM_R|PERM_W, MAP_FIXED | MAP_PRIVATE |MAP_ANONYMOUS, -1, 0);
 			copy_into(segment, length);
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
