@@ -78,8 +78,8 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
-	else
-		exit(EXIT_FAILURE);
+	// else
+	// 	exit(EXIT_FAILURE);
 }
 
 int so_init_loader(void)
