@@ -55,7 +55,7 @@ bool find(void *pageAddress, Loader *loader)
 	Page *cachedPage = loader->cachedPages;
 	while (cachedPage)
 	{
-		if (((char *)pageAddress - (char *)cachedPage->pageAddress) <= loader->pageSize && (pageAddress - cachedPage->pageAddress) >= 0)
+		if (((char *)pageAddress - (char *)cachedPage->pageAddress) < loader->pageSize && (pageAddress - cachedPage->pageAddress) > 0)
 			return true;
 		cachedPage = cachedPage->nextPage;
 	}
@@ -117,8 +117,8 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	//copiaza din fisier exact bucata de cod aferenta segmentului //
 	void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	copy_into(segment, segment_offset, pageAddress);
-	addPage(segment->vaddr + segment_offset, loader);
-	mprotect(segment->vaddr + segment_offset, getpagesize(), segment->perm);
+	addPage(pageAddress, loader);
+	mprotect(pageAddress, getpagesize(), segment->perm);
 }
 
 int so_init_loader(void)
