@@ -89,9 +89,7 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
-	printf("Am folosit xread-ul!");
 	memcpy(pageAddress, buffer, getpagesize());
-	printf("Am iesit din functie!");
 }
 
 so_seg_t *find_segment_of(void *addr)
@@ -115,10 +113,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	segment_offset -= page_offset;
 
 	if (find(si->si_addr, loader))
-	{
-		printf("Am gasit pagina ta!");
 		exit(SIGSEGV_ERROR);
-	}
 	//copiaza din fisier exact bucata de cod aferenta segmentului //
 	void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	copy_into(segment, segment_offset, pageAddress);
