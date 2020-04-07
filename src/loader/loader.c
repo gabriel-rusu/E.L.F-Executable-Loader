@@ -87,7 +87,7 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
-	char *buffer = malloc(pageSize * sizeof(char));
+	char *buffer = calloc(pageSize , sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, pageSize);
 	memcpy(pageAddress, buffer, pageSize);
@@ -99,7 +99,7 @@ so_seg_t *find_segment_of(void *addr)
 	for (int i = 0; i < exec->segments_no; i++)
 	{
 		diff = (char *)addr - (char *)exec->segments[i].vaddr;
-		if (diff <= exec->segments[i].mem_size && diff >= 0)
+		if (diff < exec->segments[i].mem_size && diff > 0)
 			return &(exec->segments[i]);
 	}
 	return NULL;
@@ -113,6 +113,8 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
 
+	if(!segment)
+		exit(SIGSEGV_ERROR);
 	if (find(si->si_addr, loader))
 		exit(SIGSEGV_ERROR);
 	//copiaza din fisier exact bucata de cod aferenta segmentului //
