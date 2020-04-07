@@ -116,17 +116,14 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 
 	if (find(si->si_addr, loader))
 	{
-		printf("Nu gasesc pagina ta!");
+		printf("Am gasit pagina ta!");
 		exit(SIGSEGV_ERROR);
 	}
-	else
-	{
-		//copiaza din fisier exact bucata de cod aferenta segmentului //
-		void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-		copy_into(segment, segment_offset,pageAddress);
-		addPage(pageAddress, loader);
-		mprotect(segment->data, getpagesize(), segment->perm);
-	}
+	//copiaza din fisier exact bucata de cod aferenta segmentului //
+	void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	copy_into(segment, segment_offset, pageAddress);
+	addPage(segment->vaddr + segment_offset, loader);
+	mprotect(segment->vaddr + segment_offset, getpagesize(), segment->perm);
 }
 
 int so_init_loader(void)
