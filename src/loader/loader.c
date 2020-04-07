@@ -86,10 +86,11 @@ ssize_t xread(int fd, void *buf, size_t count)
 
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
-	char *buffer = calloc(getpagesize(), sizeof(char));
+	ssize_t pageSize = getpagesize()
+	char *buffer = malloc(pageSize * sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-	xread(exec_decriptor, buffer, getpagesize());
-	memcpy(pageAddress, buffer, getpagesize());
+	xread(exec_decriptor, buffer, pageSize);
+	memcpy(pageAddress, buffer, pageSize);
 }
 
 so_seg_t *find_segment_of(void *addr)
