@@ -15,9 +15,52 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "exec_parser.h"
+#include <stdbool.h>
+
+#define SIGSEGV_ERROR 139
+
+typedef struct page
+{
+	void *pageAddress;
+	struct page *nextPage;
+} Page;
+
+typedef struct list
+{
+	Page *cachedPages;
+	int pageSize;
+} Loader;
 
 static so_exec_t *exec;
 static int exec_decriptor;
+static Loader *loader;
+
+void init(Loader **loader)
+{
+	*loader = malloc(sizeof(Loader));
+	(*loader)->cachedPages = NULL;
+	(*loader)->pageSize = getpagesize();
+}
+
+void addPage(void *pageAddress, Loader *loader)
+{
+	Page *newPage = malloc(sizeof(Page));
+	newPage->pageAddress = pageAddress;
+	newPage->nextPage = loader->cachedPages;
+	loader->cachedPages = newPage;
+}
+
+bool find(void *pageAddress, Loader *loader)
+{
+	Page *cachedPage = loader->cachedPages;
+	while (cachedPage)
+	{
+		if ((pageAddress - cachedPage->pageAddress) < loader->pageSize && (pageAddress - cachedPage->pageAddress) > 0)
+			return true;
+		cachedPage = cachedPage->nextPage;
+	}
+	return false;
+}
 
 ssize_t xread(int fd, void *buf, size_t count)
 {
@@ -44,7 +87,7 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment, int offset)
 {
 	char *buffer = calloc(getpagesize(), sizeof(char));
-	if(buffer==NULL)
+	if (buffer == NULL)
 		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
@@ -52,8 +95,10 @@ void copy_into(so_seg_t *segment, int offset)
 }
 
 so_seg_t *find_segment_of(void *addr)
-{	int diff;
-	for (int i = 0; i < exec->segments_no; i++){
+{
+	int diff;
+	for (int i = 0; i < exec->segments_no; i++)
+	{
 		diff = (char *)addr - (char *)exec->segments[i].vaddr;
 		if (diff < exec->segments[i].mem_size && diff >= 0)
 			return &(exec->segments[i]);
@@ -67,28 +112,29 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	so_seg_t *segment = find_segment_of(si->si_addr);
 	size_t segment_offset = (char *)si->si_addr - (char *)segment->vaddr;
 	size_t page_offset = segment_offset % pagesize;
-	segment_offset -= page_offset; 
-	
+	segment_offset -= page_offset;
+
 	if (segment != NULL)
 	{
-		if (segment->data != NULL)
-			exit(139); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
+		if (find(si->si_addr, loader))
+			exit(SIGSEGV_ERROR);
 		else
 		{
-			//copiaza din fisier exact bucata de cod aferenta segmentului 
-			segment->data = mmap((void *)si->si_addr + segment_offset, getpagesize(),PERM_R|PERM_W, MAP_FIXED | MAP_PRIVATE |MAP_ANONYMOUS, -1, 0);
-			copy_into(segment,segment_offset);
+			//copiaza din fisier exact bucata de cod aferenta segmentului
+			segment->data = mmap((void *)si->si_addr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			copy_into(segment, segment_offset);
+			addPage(si->si_addr + segment_offset, loader);
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
 	else
-		exit(139);
+		exit(SIGSEGV_ERROR);
 }
 
 int so_init_loader(void)
 {
 	struct sigaction sig;
-
+	init(&loader);
 	memset(&sig, 0, sizeof(sig));
 	sig.sa_flags = SA_SIGINFO;
 	sigemptyset(&sig.sa_mask);

@@ -29,4 +29,4 @@ clean_test:
 
 clean_src:
 	cd ./src;\
-	rm -f *.o so_exec so_test_prog libso_loader.so ../result.out
+	rm -f *.o so_exec so_test_prog libso_loader.so ../results.out ../results.out
