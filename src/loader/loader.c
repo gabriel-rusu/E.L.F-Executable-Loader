@@ -46,7 +46,7 @@ void copy_into(so_seg_t *segment, int offset)
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	if(buffer==NULL)
 		perror("Uite aici pic");
-	lseek(exec_decriptor, segment->offset, SEEK_SET);
+	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
 	memcpy(segment->data, buffer, getpagesize());
 }
