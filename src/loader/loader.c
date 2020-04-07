@@ -124,7 +124,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 		//copiaza din fisier exact bucata de cod aferenta segmentului //
 		void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 		copy_into(segment, segment_offset,pageAddress);
-		addPage((void *)(segment->vaddr + segment_offset), loader);
+		addPage(pageAddress, loader);
 		mprotect(segment->data, getpagesize(), segment->perm);
 	}
 }
