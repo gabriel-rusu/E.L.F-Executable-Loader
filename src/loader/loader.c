@@ -84,14 +84,14 @@ ssize_t xread(int fd, void *buf, size_t count)
 	return bytes_read;
 }
 
-void copy_into(so_seg_t *segment, int offset)
+void copy_into(so_seg_t *segment, int offset,void *pageAddress)
 {
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	if (buffer == NULL)
 		perror("Uite aici pic");
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
-	memcpy(segment->data, buffer, getpagesize());
+	memcpy(pageAddress, buffer, getpagesize());
 }
 
 so_seg_t *find_segment_of(void *addr)
@@ -121,9 +121,9 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 		else
 		{
 			//copiaza din fisier exact bucata de cod aferenta segmentului
-			segment->data = mmap((void *)si->si_addr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-			copy_into(segment, segment_offset);
-			addPage(si->si_addr + segment_offset, loader);
+			void * pageAddress = mmap((void *)si->si_addr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			copy_into(segment, segment_offset,pageAddress);
+			addPage(pageAddress, loader);
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
