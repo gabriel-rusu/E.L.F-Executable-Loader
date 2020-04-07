@@ -86,7 +86,7 @@ ssize_t xread(int fd, void *buf, size_t count)
 
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
-	ssize_t pageSize = getpagesize()
+	ssize_t pageSize = getpagesize();
 	char *buffer = malloc(pageSize * sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, pageSize);
