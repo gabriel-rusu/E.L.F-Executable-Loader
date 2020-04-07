@@ -12,7 +12,7 @@ run: build
 run_test_no:
 	cd ./test &&\
 	_test/run_test.sh init &&\
-	_test/run_test.sh 1 &&\
+	_test/run_test.sh 5 &&\
 	_test/run_test.sh clean
 save: clean
 	git add -A	&&\

@@ -87,9 +87,12 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
-	char *buffer = calloc(pageSize , sizeof(char));
+	char *buffer = calloc(pageSize, sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-	xread(exec_decriptor, buffer, pageSize);
+	int bytesRead = xread(exec_decriptor, buffer, pageSize);
+	if (bytesRead != pageSize)
+		for (int i = bytesRead; i < pageSize; i++)
+			buffer[i] = 0;
 	memcpy(pageAddress, buffer, pageSize);
 }
 
@@ -113,7 +116,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
 
-	if(!segment)
+	if (!segment)
 		exit(SIGSEGV_ERROR);
 	if (find(si->si_addr, loader))
 		exit(SIGSEGV_ERROR);
