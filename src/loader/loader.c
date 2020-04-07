@@ -91,7 +91,7 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	int bytesRead = xread(exec_decriptor, buffer, pageSize);
 	if (bytesRead != pageSize)
-		for (int i = bytesRead; i < pageSize; i++)
+		for (int i = bytesRead; i <= pageSize; i++)
 			buffer[i] = 0;
 	memcpy(pageAddress, buffer, pageSize);
 }
