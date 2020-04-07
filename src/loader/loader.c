@@ -55,7 +55,7 @@ bool find(void *pageAddress, Loader *loader)
 	Page *cachedPage = loader->cachedPages;
 	while (cachedPage)
 	{
-		if ((pageAddress - cachedPage->pageAddress) <= loader->pageSize && (pageAddress - cachedPage->pageAddress) >= 0)
+		if (((char*)pageAddress - (char*)cachedPage->pageAddress) <= loader->pageSize && (pageAddress - cachedPage->pageAddress) >= 0)
 			return true;
 		cachedPage = cachedPage->nextPage;
 	}
