@@ -84,7 +84,7 @@ ssize_t xread(int fd, void *buf, size_t count)
 	return bytes_read;
 }
 
-void copy_into(so_seg_t *segment, int offset,void *pageAddress)
+void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	if (buffer == NULL)
@@ -114,21 +114,16 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
 
-	if (segment != NULL)
-	{
-		if (find(si->si_addr, loader))
-			exit(SIGSEGV_ERROR);
-		else
-		{
-			//copiaza din fisier exact bucata de cod aferenta segmentului
-			void * pageAddress = mmap((void *)si->si_addr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-			copy_into(segment, segment_offset,pageAddress);
-			addPage(pageAddress, loader);
-			mprotect(segment->data, getpagesize(), segment->perm);
-		}
-	}
-	else
+	if (find(si->si_addr, loader))
 		exit(SIGSEGV_ERROR);
+	else
+	{
+		//copiaza din fisier exact bucata de cod aferenta segmentului
+		void *pageAddress = mmap((void *)si->si_addr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		copy_into(segment, segment_offset, pageAddress);
+		addPage(pageAddress, loader);
+		mprotect(segment->data, getpagesize(), segment->perm);
+	}
 }
 
 int so_init_loader(void)
