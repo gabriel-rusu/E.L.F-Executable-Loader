@@ -89,9 +89,9 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
-	pritnf("Am folosit xread-ul!");
+	printf("Am folosit xread-ul!");
 	memcpy(pageAddress, buffer, getpagesize());
-	pritnf("Am iesit din functie!");
+	printf("Am iesit din functie!");
 }
 
 so_seg_t *find_segment_of(void *addr)
