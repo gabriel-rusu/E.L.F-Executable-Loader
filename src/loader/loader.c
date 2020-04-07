@@ -63,23 +63,27 @@ so_seg_t *find_segment_of(void *addr)
 
 static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
+	size_t pagesize = getpagesize();
 	so_seg_t *segment = find_segment_of(si->si_addr);
-	size_t length = (char *)si->si_addr - (char *)segment->vaddr;
+	size_t segment_offset = (char *)si->si_addr - (char *)segment->vaddr;
+	size_t page_offset = segment_offset % pagesize;
+	segment_offset -= page_offset; 
+	
 	printf("length between the addresses is: %d\n",length);
 	if (segment != NULL)
 	{
-		// if (segment->data != NULL)
-		// 	exit(EXIT_FAILURE); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
-		// else
+		if (segment->data != NULL)
+			exit(139); // fault-ul este generat într-o pagină deja mapată, acces la memorie nepermis
+		else
 		{
 			//copiaza din fisier exact bucata de cod aferenta segmentului 
-			segment->data = mmap((void *)si->si_addr, getpagesize(),PERM_R|PERM_W, MAP_FIXED | MAP_PRIVATE |MAP_ANONYMOUS, -1, 0);
+			segment->data = mmap((void *)si->si_addr + segment_offset, getpagesize(),PERM_R|PERM_W, MAP_FIXED | MAP_PRIVATE |MAP_ANONYMOUS, -1, 0);
 			copy_into(segment, length);
 			mprotect(segment->data, getpagesize(), segment->perm);
 		}
 	}
-	// else
-	// 	exit(EXIT_FAILURE);
+	else
+		exit(139);
 }
 
 int so_init_loader(void)

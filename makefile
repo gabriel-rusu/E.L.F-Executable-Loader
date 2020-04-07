@@ -9,6 +9,11 @@ run_test: build
 run: build
 	cd ./test &&\
 	make -f Makefile.checker > ../results.out
+run_test_no:
+	cd ./test &&\
+	_test/run_test.sh init &&\
+	_test/run_test.sh 1 &&\
+	_test/run_test.sh clean
 save: clean
 	git add -A	&&\
 	echo Enter commit message: &&\
