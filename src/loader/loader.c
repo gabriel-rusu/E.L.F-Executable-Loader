@@ -46,7 +46,7 @@ void copy_into(so_seg_t *segment, int offset)
 	char *buffer = calloc(getpagesize(), sizeof(char));
 	if(buffer==NULL)
 		perror("Uite aici pic");
-	lseek(exec_decriptor, segment->offset+offset, SEEK_SET);
+	lseek(exec_decriptor, segment->offset, SEEK_SET);
 	xread(exec_decriptor, buffer, getpagesize());
 	memcpy(segment->data, buffer, getpagesize());
 }
@@ -69,7 +69,6 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset; 
 	
-	printf("length between the addresses is: %d\n",length);
 	if (segment != NULL)
 	{
 		if (segment->data != NULL)

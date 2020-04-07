@@ -1,0 +1,73 @@
+make[1]: Entering directory '/mnt/d/Projects/Executable-Loader/test'
+make -C inputs
+make[3]: Nothing to be done for 'all'.
+'checkpatch.pl' tool not found on your system. Skipping source check...
+Please download 'checkpatch.pl' from 'https://raw.githubusercontent.com/torvalds/linux/master/scripts/checkpatch.pl' and install it in your $PATH.
+
+00) Sources check...........................................failed  [ 0/95]
+01) Test simple execution...................................failed  [ 0/95]
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected 1
+02) Test hello..............................................failed  [ 0/95]
+_test/outputs/test2.out vs _test/refs/test2.ref:
+--- _test/outputs/test2.out	2020-04-07 22:00:14.758067300 +0300
++++ _test/refs/test2.ref	2020-03-21 11:45:46.356161500 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++Hello, world!
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected  2
+03) Test sum................................................failed  [ 0/95]
+_test/outputs/test3.out vs _test/refs/test3.ref:
+--- _test/outputs/test3.out	2020-04-07 22:00:14.855700800 +0300
++++ _test/refs/test3.ref	2020-03-21 11:45:46.357158600 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++1720232652
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected  3
+04) Test bss................................................failed  [ 0/95]
+_test/outputs/test4.out vs _test/refs/test4.ref:
+--- _test/outputs/test4.out	2020-04-07 22:00:14.954227600 +0300
++++ _test/refs/test4.ref	2020-03-21 11:45:46.357158600 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++SUCCESS
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected  2
+05) Test data and bss.......................................failed  [ 0/95]
+_test/outputs/test5.out vs _test/refs/test5.ref:
+--- _test/outputs/test5.out	2020-04-07 22:00:15.057803300 +0300
++++ _test/refs/test5.ref	2020-03-21 11:45:46.357158600 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++SUCCESS
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected  3
+06) Test no permissions.....................................failed  [ 0/95]
+Incorrect exit code: got 126, expected 139
+Incorrect number of faults: got 0, expected 2
+07) Test invalid permissions................................failed  [ 0/95]
+Incorrect exit code: got 126, expected 139
+Incorrect number of faults: got 0, expected 1
+08) Test permissions........................................failed  [ 0/95]
+_test/outputs/test8.out vs _test/refs/test8.ref:
+--- _test/outputs/test8.out	2020-04-07 22:00:15.265488400 +0300
++++ _test/refs/test8.ref	2020-03-21 11:45:46.358156500 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++SUCCESS
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected  2
+09) Test complex program....................................failed  [ 0/95]
+_test/outputs/test9.out vs _test/refs/test9.ref:
+--- _test/outputs/test9.out	2020-04-07 22:00:15.369895100 +0300
++++ _test/refs/test9.ref	2020-03-21 11:45:46.358156500 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++0x605c7ecf
+Incorrect exit code: got 126, expected 0
+Incorrect number of faults: got 0, expected > 50
+
+                                                            Total:  [00/95]
+make[1]: Leaving directory '/mnt/d/Projects/Executable-Loader/test'
