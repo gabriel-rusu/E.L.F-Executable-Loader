@@ -88,9 +88,8 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	int pageSize = getpagesize();
 	char *buffer = calloc(pageSize, sizeof(char));
-	int readBytes = 0;
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-	readBytes = xread(exec_decriptor, buffer, pageSize);
+	xread(exec_decriptor, buffer, pageSize);
 	memcpy(pageAddress, buffer, getpagesize());
 }
 
