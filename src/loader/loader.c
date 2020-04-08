@@ -121,10 +121,14 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
 
-	if (!segment)
+	if (!segment){
+		printf("I don't find a segemnt!");
 		exit(SIGSEGV_ERROR);
-	if (find(si->si_addr, loader))
+	}
+	if (find(si->si_addr, loader)){
+		printf("I found a page!");
 		exit(SIGSEGV_ERROR);
+	}
 	//copiaza din fisier exact bucata de cod aferenta segmentului //
 	void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	copy_into(segment, segment_offset, pageAddress);
