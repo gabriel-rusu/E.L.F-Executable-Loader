@@ -94,12 +94,12 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	ssize_t pageSize = getpagesize();
 	char *buffer = malloc(pageSize * sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-	if (offset + pageSize < segment->file_size)
+	if (offset + pageSize <= segment->file_size)
 	{
 		xread(exec_decriptor, buffer, pageSize);
 		memcpy(pageAddress, buffer, pageSize);
 	}
-	else if (offset < segment->file_size)
+	else if (offset <= segment->file_size)
 	{
 		xread(exec_decriptor, buffer, segment->file_size - offset);
 		memset(buffer + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
