@@ -133,12 +133,12 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 
 	if (!segment)
 	{
-		printf("I don't find a segmnt!");
+		perror("I don't find a segmnt!");
 		exit(SIGSEGV_ERROR);
 	}
 	if (find(si->si_addr, loader))
 	{
-		printf("I found a page!");
+		perror("I found a page!");
 		exit(SIGSEGV_ERROR);
 	}
 	//map the addres that generated the SIGSEGV signal
