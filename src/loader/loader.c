@@ -118,7 +118,7 @@ so_seg_t *find_segment_of(void *addr)
 	for (int i = 0; i < exec->segments_no; i++)
 	{
 		diff = (char *)addr - (char *)exec->segments[i].vaddr;
-		if (diff <= exec->segments[i].mem_size && diff >= 0)
+		if (diff <= exec->segments[i].mem_size && diff > 0)
 			return &(exec->segments[i]);
 	}
 	return NULL;
