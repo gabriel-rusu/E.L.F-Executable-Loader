@@ -58,7 +58,7 @@ bool find(void *pageAddress, Loader *loader)
 	Page *cachedPage = loader->cachedPages;
 	while (cachedPage)
 	{
-		if (((char *)pageAddress - (char *)cachedPage->pageAddress) <= loader->pageSize && (pageAddress - cachedPage->pageAddress) >= 0)
+		if (((char *)pageAddress - (char *)cachedPage->pageAddress) < loader->pageSize && (pageAddress - cachedPage->pageAddress) > 1)
 			return true;
 		cachedPage = cachedPage->nextPage;
 	}
@@ -92,7 +92,6 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment,size_t  offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
-	char *buffer = malloc(pageSize * sizeof(char));
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	if (offset + pageSize <= segment->file_size)
 	{
