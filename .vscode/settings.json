@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "exec_parser.h": "c"
+        "exec_parser.h": "c",
+        "stat.h": "c",
+        "fcntl.h": "c",
+        "stdbool.h": "c"
     }
 }
