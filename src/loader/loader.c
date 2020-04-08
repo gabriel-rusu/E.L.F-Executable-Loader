@@ -96,14 +96,16 @@ void copy_into(so_seg_t *segment,size_t  offset, void *pageAddress)
 	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 	if (offset + pageSize <= segment->file_size)
 	{
-		xread(exec_decriptor, buffer, pageSize);
-		memcpy(pageAddress, buffer, pageSize);
+		// xread(exec_decriptor, buffer, pageSize);
+		// memcpy(pageAddress, buffer, pageSize);
+		xread(exec_decriptor,pageAddress,pageSize);
 	}
 	else if (offset <= segment->file_size)
 	{
-		xread(exec_decriptor, buffer, segment->file_size - offset);
-		memset(buffer + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
-		memcpy(pageAddress, buffer, pageSize);
+		// xread(exec_decriptor, buffer, segment->file_size - offset);
+		xread(exec_decriptor, pageAddress, segment->file_size - offset);
+		memset(pageAddress + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
+		// memcpy(pageAddress, buffer, pageSize);
 	}
 	else if (offset > segment->file_size)
 		memset(pageAddress, 0, pageSize);
