@@ -128,7 +128,8 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t segment_offset = (char *)si->si_addr - (char *)segment->vaddr;
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
-	printf("%d -- this is a SIGSEGV!!");
+	printf("-------->>%d -- this is a SIGSEGV!!\n");
+	printf("SIGSEGV address: %p\n")
 	if (!segment)
 	{
 		printf("I don't find a segmnt!");
