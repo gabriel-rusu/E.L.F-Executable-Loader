@@ -92,19 +92,21 @@ ssize_t xread(int fd, void *buf, size_t count)
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
-	char *buffer = calloc(pageSize, sizeof(char));
+	char *buffer = malloc(pageSize * sizeof(char));
 	printf("Start to read from here: %d but file has %d, segment offset is %d\n ", segment->offset + offset, segment->file_size, segment->offset);
 	int bytesRead;
-	if (offset < segment->file_size)
+	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
+	if (offset + pageSize < segment->file_size)
 	{
-		lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-		bytesRead = xread(exec_decriptor, buffer, pageSize);
+		xread(exec_decriptor, buffer, pageSize);
 		memcpy(pageAddress, buffer, pageSize);
 	}
-	if (segment->mem_size - offset > pageSize)
-		memcpy(pageAddress, buffer, pageSize);
 	else
-		memcpy(pageAddress, buffer, segment->mem_size - offset);
+	{
+		xread(exec_decriptor, buffer, segment->file_size - offset);
+		memset(buffer + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
+		memcpy(pageAddress, buffer, pageSize);
+	}
 }
 
 //find the segment that caused the segfault
@@ -127,9 +129,9 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	so_seg_t *segment = find_segment_of(si->si_addr);
 	size_t segment_offset = (char *)si->si_addr - (char *)segment->vaddr;
 	size_t page_offset = segment_offset % pagesize;
+
 	segment_offset -= page_offset;
-	printf("-------->>%d -- this is a SIGSEGV!!\n");
-	printf("SIGSEGV address: %p\n");
+
 	if (!segment)
 	{
 		printf("I don't find a segmnt!");
@@ -151,6 +153,7 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 int so_init_loader(void)
 {
 	struct sigaction sig;
+
 	init(&loader);
 	memset(&sig, 0, sizeof(sig));
 	sig.sa_flags = SA_SIGINFO;
