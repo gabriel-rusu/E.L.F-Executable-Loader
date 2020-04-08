@@ -89,8 +89,11 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	ssize_t pageSize = getpagesize();
 	char *buffer = calloc(pageSize, sizeof(char));
 	printf("Start to read from here: %d but file has %d, segment offset is %d\n ",segment->offset + offset,segment->file_size,segment->offset);
-	lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
-	int bytesRead = xread(exec_decriptor, buffer, pageSize);
+	int bytesRead;
+	if(offset<segment->file_size){
+		lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
+		bytesRead = xread(exec_decriptor, buffer, pageSize);
+	}
 	if (bytesRead != pageSize)
 		for (int i = bytesRead-1; i <= pageSize; i++)
 			buffer[i] = 0;
