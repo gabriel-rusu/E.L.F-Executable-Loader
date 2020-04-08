@@ -107,8 +107,8 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 	}
 	else if (offset > segment->file_size)
 	{
-		memset(buffer, 0, pageSize);
-		memcpy(pageAddress, buffer, pageSize);
+		memset(pageAddress, 0, pageSize);
+
 	}
 }
 
