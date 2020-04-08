@@ -1,0 +1,6 @@
+_test/outputs/test3.out vs _test/refs/test3.ref:
+--- _test/outputs/test3.out	2020-04-08 20:37:01.358507500 +0300
++++ _test/refs/test3.ref	2020-03-21 11:45:46.357158600 +0200
+@@ -1 +1 @@
+-./_test/run_test.sh: line 142: _test/run_test: cannot execute binary file: Exec format error
++1720232652
