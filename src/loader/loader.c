@@ -101,11 +101,15 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 		xread(exec_decriptor, buffer, pageSize);
 		memcpy(pageAddress, buffer, pageSize);
 	}
-	else
+	else if(offset < segment->file_size)
 	{
 		xread(exec_decriptor, buffer, segment->file_size - offset);
 		memset(buffer + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
 		memcpy(pageAddress, buffer, pageSize);
+	} else if(offset > segment->file_size)
+	{
+		memset(buffer,0,pageSize);
+		memcpy(pageAddress,buffer,pageSize);
 	}
 }
 
