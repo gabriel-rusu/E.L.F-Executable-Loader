@@ -101,15 +101,16 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 		xread(exec_decriptor, buffer, pageSize);
 		memcpy(pageAddress, buffer, pageSize);
 	}
-	else if(offset < segment->file_size)
+	else if (offset < segment->file_size)
 	{
 		xread(exec_decriptor, buffer, segment->file_size - offset);
 		memset(buffer + segment->file_size - offset, 0, offset + pageSize - segment->file_size);
 		memcpy(pageAddress, buffer, pageSize);
-	} else if(offset > segment->file_size)
+	}
+	else if (offset > segment->file_size)
 	{
-		memset(buffer,0,pageSize);
-		memcpy(pageAddress,buffer,pageSize);
+		memset(buffer, 0, pageSize);
+		memcpy(pageAddress, buffer, pageSize);
 	}
 }
 
@@ -120,7 +121,7 @@ so_seg_t *find_segment_of(void *addr)
 	for (int i = 0; i < exec->segments_no; i++)
 	{
 		diff = (char *)addr - (char *)exec->segments[i].vaddr;
-		if (diff < exec->segments[i].mem_size && diff >= 0)
+		if (diff <= exec->segments[i].mem_size && diff >= 0)
 			return &(exec->segments[i]);
 	}
 	return NULL;
@@ -133,7 +134,6 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	so_seg_t *segment = find_segment_of(si->si_addr);
 	size_t segment_offset = (char *)si->si_addr - (char *)segment->vaddr;
 	size_t page_offset = segment_offset % pagesize;
-
 	segment_offset -= page_offset;
 
 	if (!segment)
