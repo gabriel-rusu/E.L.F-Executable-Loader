@@ -58,7 +58,7 @@ bool find(void *pageAddress, Loader *loader)
 	Page *cachedPage = loader->cachedPages;
 	while (cachedPage)
 	{
-		if (((char *)pageAddress - (char *)cachedPage->pageAddress) < loader->pageSize && (pageAddress - cachedPage->pageAddress) > 0)
+		if (((char *)pageAddress - (char *)cachedPage->pageAddress) <= loader->pageSize && (pageAddress - cachedPage->pageAddress) >= 0)
 			return true;
 		cachedPage = cachedPage->nextPage;
 	}
@@ -118,7 +118,7 @@ so_seg_t *find_segment_of(void *addr)
 	for (int i = 0; i < exec->segments_no; i++)
 	{
 		diff = (char *)addr - (char *)exec->segments[i].vaddr;
-		if (diff <= exec->segments[i].mem_size && diff > 0)
+		if (diff <= exec->segments[i].mem_size && diff >= 0)
 			return &(exec->segments[i]);
 	}
 	return NULL;
