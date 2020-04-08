@@ -88,16 +88,17 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
 	char *buffer = calloc(pageSize, sizeof(char));
-	printf("Start to read from here: %d but file has %d, segment offset is %d\n ",segment->offset + offset,segment->file_size,segment->offset);
+	printf("Start to read from here: %d but file has %d, segment offset is %d\n ", segment->offset + offset, segment->file_size, segment->offset);
 	int bytesRead;
-	if(offset<segment->file_size){
+	if (offset < segment->file_size)
+	{
 		lseek(exec_decriptor, segment->offset + offset, SEEK_SET);
 		bytesRead = xread(exec_decriptor, buffer, pageSize);
+		memcpy(pageAddress, buffer, pageSize);
 	}
-	if (bytesRead != pageSize)
-		for (int i = bytesRead-1; i <= pageSize; i++)
-			buffer[i] = 0;
-	memcpy(pageAddress, buffer, pageSize);
+	if(segment->mem_size - offset > pageSize)
+		memcpy(pageAddress, buffer, pageSize);
+	else memcpy(pageAddress,buffer,segment->mem_size - offset);
 }
 
 so_seg_t *find_segment_of(void *addr)
