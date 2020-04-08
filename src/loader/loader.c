@@ -35,6 +35,7 @@ static so_exec_t *exec;
 static int exec_decriptor;
 static Loader *loader;
 
+// initialize the loader structure
 void init(Loader **loader)
 {
 	*loader = malloc(sizeof(Loader));
@@ -42,6 +43,7 @@ void init(Loader **loader)
 	(*loader)->pageSize = getpagesize();
 }
 
+// adds a page to the loader mapped pages for the program in execution
 void addPage(void *pageAddress, Loader *loader)
 {
 	Page *newPage = malloc(sizeof(Page));
@@ -50,6 +52,7 @@ void addPage(void *pageAddress, Loader *loader)
 	loader->cachedPages = newPage;
 }
 
+// search & find the pageAddress in the loader already mapped pages
 bool find(void *pageAddress, Loader *loader)
 {
 	Page *cachedPage = loader->cachedPages;
@@ -62,6 +65,7 @@ bool find(void *pageAddress, Loader *loader)
 	return false;
 }
 
+//reads into the buffer buf count bytes
 ssize_t xread(int fd, void *buf, size_t count)
 {
 	size_t bytes_read = 0;
@@ -84,6 +88,7 @@ ssize_t xread(int fd, void *buf, size_t count)
 	return bytes_read;
 }
 
+// copy the instructions into the pages
 void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 {
 	ssize_t pageSize = getpagesize();
@@ -96,11 +101,13 @@ void copy_into(so_seg_t *segment, int offset, void *pageAddress)
 		bytesRead = xread(exec_decriptor, buffer, pageSize);
 		memcpy(pageAddress, buffer, pageSize);
 	}
-	if(segment->mem_size - offset > pageSize)
+	if (segment->mem_size - offset > pageSize)
 		memcpy(pageAddress, buffer, pageSize);
-	else memcpy(pageAddress,buffer,segment->mem_size - offset);
+	else
+		memcpy(pageAddress, buffer, segment->mem_size - offset);
 }
 
+//find the segment that caused the segfault
 so_seg_t *find_segment_of(void *addr)
 {
 	int diff;
@@ -113,6 +120,7 @@ so_seg_t *find_segment_of(void *addr)
 	return NULL;
 }
 
+//the definition of the new handler for the SIGSEGV signal
 static void signal_handler(int sig, siginfo_t *si, void *unused)
 {
 	size_t pagesize = getpagesize();
@@ -121,21 +129,24 @@ static void signal_handler(int sig, siginfo_t *si, void *unused)
 	size_t page_offset = segment_offset % pagesize;
 	segment_offset -= page_offset;
 
-	if (!segment){
-		printf("I don't find a segemnt!");
+	if (!segment)
+	{
+		printf("I don't find a segmnt!");
 		exit(SIGSEGV_ERROR);
 	}
-	if (find(si->si_addr, loader)){
+	if (find(si->si_addr, loader))
+	{
 		printf("I found a page!");
 		exit(SIGSEGV_ERROR);
 	}
-	//copiaza din fisier exact bucata de cod aferenta segmentului //
+	//map the addres that generated the SIGSEGV signal
 	void *pageAddress = mmap((void *)segment->vaddr + segment_offset, getpagesize(), PERM_R | PERM_W, MAP_FIXED | MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	copy_into(segment, segment_offset, pageAddress);
 	addPage(pageAddress, loader);
 	mprotect(pageAddress, getpagesize(), segment->perm);
 }
 
+//initialize loader structure and assigns the new handler for SIGSEGV
 int so_init_loader(void)
 {
 	struct sigaction sig;
@@ -151,7 +162,9 @@ int so_init_loader(void)
 
 int so_execute(char *path, char *argv[])
 {
-	exec_decriptor = open(path, O_RDONLY); //if this fails then the so_parse_exec will exit
+
+	exec_decriptor = open(path, O_RDONLY); //tests for file existance are made in the so_parse_exec
+	//if this fails then the so_parse_exec will exit
 	exec = so_parse_exec(path);
 	if (!exec)
 		return -1;
