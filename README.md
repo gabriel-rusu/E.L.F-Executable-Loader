@@ -5,7 +5,8 @@
 
 <h1 align="center">E.L.F Executable Loader</h3>
 
-<p align="center"> Few lines describing your project.
+<p align="justify"> 
+The E.L.F Executable Loader loads the executable file into memory page-by-page, using a request-paging mechanism - a page will only be loaded when it is needed. For simplicity, the loader runs only static executable files - which is not linked to shared / dynamic libraries.
     <br> 
 </p>
 
