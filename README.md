@@ -24,6 +24,9 @@ The E.L.F Executable Loader loads the executable file into memory page-by-page, 
 ## 🧐 About <a name = "about"></a>
 The interface of the loader is presented in the header loader.h file. This has functions to initialize a loader (so_init loader) and execute a binary (so_execute)
 
+* The so_init_loader function performs the library initialization. Within the function, the page fault handler will generally be recorded as a routine for handling the **SIGSEGV** signal or an exceptional handler.
+* The so_execute function performs the parsing of the binary specified in the path and executes the first entry point of the executable.
+
 ## 🏁 Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
