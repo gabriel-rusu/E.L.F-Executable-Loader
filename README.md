@@ -29,49 +29,42 @@ The interface of the loader is presented in the header loader.h file. This has f
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-What things you need to install the software and how to install them.
+To use the os_io.h library on your projects you must have:
 
-```
-Give examples
-```
+* for UNIX based operating systems:
+  * gcc - is a tool from the GNU Compiler Collection used to compile and link C programs
 
 ### Installing
-A step by step series of examples that tell you how to get a development env running.
+This is a step by step series of examples that tell you how to get a development env running.
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
-
+* Linux:
+  * start by updating the packages list
+    ```bash
+    $sudo apt update
+    ```
+  * install the build-essential package(a package of new packages including gcc, g++ and make) by typing:
+    ```bash
+    $sudo apt install build-essential 
+    ```
 ## 🔧 Running the tests <a name = "tests"></a>
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-Explain what these tests test and why
-
-```
-Give an example
-```
+If you want to run the automated tests for Linux system you must follow the following steps:
+* clone the repository by copping the following command in your terminal:
+  ```
+  git clone https://github.com/RusuGabriel/E.L.F-Executable-Loader.git
+  ```
+* go into the project director and run the following command:
+  ```bash
+  make test
+  ```
+* the results of the tests will be in the newly created file result.out
 
 ## 🎈 Usage <a name="usage"></a>
-Add notes about how to use the system.
+If you want to use the ***os_io.so*** library in your projects then you must add the ***os_io.h*** header in the desired source file and specify at the compile time the path to the os_io.so library.
 
+* running the following command in the project director will generate the os_io.so:
+  ```bash
+  make build
+  ```
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [Visual Studio Code](https://code.visualstudio.com/) - code editor
 - [gcc](https://gcc.gnu.org/) - used to compile the library on my Linux machine
