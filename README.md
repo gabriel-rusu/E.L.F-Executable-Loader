@@ -70,4 +70,4 @@ If you want to use the ***libso_loader.so*** library in your projects then you m
 - [gcc](https://gcc.gnu.org/) - used to compile the library on my Linux machine
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@RusuGabriel](https://github.com/RusuGabriel) - Idea & Initial work
+- [@RusuGabriel](https://github.com/RusuGabriel) - implementation
