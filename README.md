@@ -29,7 +29,7 @@ The interface of the loader is presented in the header loader.h file. This has f
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-To use the os_io.h library on your projects you must have:
+To use the loader.h library on your projects you must have:
 
 * for UNIX based operating systems:
   * gcc - is a tool from the GNU Compiler Collection used to compile and link C programs
@@ -59,9 +59,9 @@ If you want to run the automated tests for Linux system you must follow the foll
 * the results of the tests will be in the newly created file result.out
 
 ## 🎈 Usage <a name="usage"></a>
-If you want to use the ***os_io.so*** library in your projects then you must add the ***os_io.h*** header in the desired source file and specify at the compile time the path to the os_io.so library.
+If you want to use the ***libso_loader.so*** library in your projects then you must add the ***loader.h*** header in the desired source file and specify at the compile time the path to the libso_loader.so library.
 
-* running the following command in the project director will generate the os_io.so:
+* running the following command in the project director will generate the libso_loader.so:
   ```bash
   make build
   ```
