@@ -13,10 +13,8 @@ The E.L.F Executable Loader loads the executable file into memory page-by-page, 
 ## 📝 Table of Contents
 - [About](#about)
 - [Getting Started](#getting_started)
-- [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [TODO](../TODO.md)
 - [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
@@ -28,7 +26,7 @@ The interface of the loader is presented in the header loader.h file. This has f
 * The so_execute function performs the parsing of the binary specified in the path and executes the first entry point of the executable.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 What things you need to install the software and how to install them.
@@ -74,21 +72,9 @@ Give an example
 ## 🎈 Usage <a name="usage"></a>
 Add notes about how to use the system.
 
-## 🚀 Deployment <a name = "deployment"></a>
-Add additional notes about how to deploy this on a live system.
-
 ## ⛏️ Built Using <a name = "built_using"></a>
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [Visual Studio Code](https://code.visualstudio.com/) - code editor
+- [gcc](https://gcc.gnu.org/) - used to compile the library on my Linux machine
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+- [@RusuGabriel](https://github.com/RusuGabriel) - Idea & Initial work
