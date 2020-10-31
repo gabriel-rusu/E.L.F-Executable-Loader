@@ -15,9 +15,7 @@ The E.L.F Executable Loader loads the executable file into memory page-by-page, 
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
 The interface of the loader is presented in the header loader.h file. This has functions to initialize a loader (so_init loader) and execute a binary (so_execute)
