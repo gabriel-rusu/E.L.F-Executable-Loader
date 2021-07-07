@@ -38,17 +38,17 @@ This is a step by step series of examples that tell you how to get a development
 * Linux:
   * start by updating the packages list
     ```bash
-    $sudo apt-get update
+    sudo apt-get update
     ```
   * install the build-essential package(a package of new packages including gcc, g++ and make) by typing:
     ```bash
-    $sudo apt-get install build-essential 
+    sudo apt-get install build-essential 
     ```
 ## 🔧 Running the tests <a name = "tests"></a>
 If you want to run the automated tests for Linux system you must follow the following steps:
 * clone the repository by copping the following command in your terminal:
   ```
-  git clone https://github.com/RusuGabriel/E.L.F-Executable-Loader.git
+  git clone https://github.com/gabriel-rusu/E.L.F-Executable-Loader.git
   ```
 * go into the project director and run the following command:
   ```bash
@@ -68,4 +68,4 @@ If you want to use the ***libso_loader.so*** library in your projects then you m
 - [gcc](https://gcc.gnu.org/) - used to compile the library on my Linux machine
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@RusuGabriel](https://github.com/RusuGabriel) - implementation
+- [@gabriel-rusu](https://github.com/gabriel-rusu) - implementation
