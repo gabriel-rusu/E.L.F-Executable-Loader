@@ -40,7 +40,7 @@ This is a step by step series of examples that tell you how to get a development
     ```bash
     sudo apt-get update
     ```
-  * install the build-essential package(a package of new packages including gcc, g++ and make) by typing:
+  * install the build-essential package(a bundle of packages including gcc, g++ and make) by typing:
     ```bash
     sudo apt-get install build-essential 
     ```
